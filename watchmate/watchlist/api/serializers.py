@@ -2,11 +2,6 @@ from rest_framework import serializers
 
 from watchlist.models import WatchList, StreamPlatform
 
-class StreamPlatformSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = StreamPlatform
-        exclude = ['created']
-        read_only_fields = ['id']
 
 class WatchListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +9,13 @@ class WatchListSerializer(serializers.ModelSerializer):
         exclude = ['created']
         read_only_fields = ['id']
 
+class StreamPlatformSerializer(serializers.ModelSerializer):
+    watchlists = WatchListSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = StreamPlatform
+        exclude = ['created']
+        read_only_fields = ['id']
 '''
 def name_length(value):
     if len(value) < 2:
