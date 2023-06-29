@@ -90,6 +90,7 @@ class WatchListDetailAV(APIView):
         movie.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 '''
 @api_view(['GET', 'POST'])
 def movie_list(request):
