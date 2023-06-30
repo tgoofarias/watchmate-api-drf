@@ -8,10 +8,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         model = Review
         exclude = ['created', 'updated']
 
-    def create(self, validated_data):
-        watchlist_id = self.context['view'].kwargs['pk']
-        validated_data['watchlist'] = WatchList.objects.get(id=watchlist_id)
-        return super().create(validated_data)
 
 class WatchListSerializer(serializers.ModelSerializer):
     reviews = ReviewSerializer(many=True, read_only=True)

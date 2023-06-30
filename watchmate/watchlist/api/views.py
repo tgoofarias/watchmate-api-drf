@@ -16,6 +16,12 @@ class ReviewList(generics.ListCreateAPIView):
         pk = self.kwargs['pk']
         return Review.objects.filter(watchlist=pk)
 
+    def perform_create(self, serializer):
+        watchlist_id = self.kwargs['pk']
+        watchlist = WatchList.objects.get(id=watchlist_id)
+        serializer.save(watchlist=watchlist)
+
+
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
