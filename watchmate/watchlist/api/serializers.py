@@ -6,7 +6,7 @@ from watchlist.models import WatchList, StreamPlatform, Review
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        exclude = ['created', 'updated']
+        exclude = ['watchlist', 'created', 'updated']
 
 
 class WatchListSerializer(serializers.ModelSerializer):
