@@ -1,4 +1,5 @@
 from rest_framework import generics
+from rest_framework.exceptions import ValidationError
 
 from watchlist.models import WatchList, StreamPlatform, Review
 from .serializers import WatchListSerializer, StreamPlatformSerializer, ReviewSerializer
@@ -12,9 +13,16 @@ class ReviewList(generics.ListCreateAPIView):
         return Review.objects.filter(watchlist=pk)
 
     def perform_create(self, serializer):
-        watchlist_id = self.kwargs['pk']
+        user = self.request.user
+
+        if not user.is_authenticated:
+            raise ValidationError('Please login to make a review.')
+        elif Review.objects.get(user=user):
+            raise ValidationError('User already have a review.')
+
+        watchlist_id = self.kwargs.get('pk')
         watchlist = WatchList.objects.get(id=watchlist_id)
-        serializer.save(watchlist=watchlist)
+        serializer.save(watchlist=watchlist, user=user)
 
 
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
