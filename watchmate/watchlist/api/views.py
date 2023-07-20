@@ -17,13 +17,25 @@ class ReviewList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
 
-        if not user.is_authenticated:
-            raise ValidationError('Please login to make a review.')
-        elif Review.objects.get(user=user):
-            raise ValidationError('User already have a review.')
-
         watchlist_id = self.kwargs.get('pk')
         watchlist = WatchList.objects.get(id=watchlist_id)
+
+        if not user.is_authenticated:
+            raise ValidationError('Please login to make a review.')
+        try:
+            Review.objects.get(user=user)
+            raise ValidationError('User already have a review.')
+        except Review.DoesNotExist:
+            pass
+
+        if watchlist.number_rating == 0:
+            print(watchlist.number_rating)
+            watchlist.rating = serializer.validated_data['rating']
+        else:
+            watchlist.rating = (watchlist.rating + serializer.validated_data['rating'])/2
+        watchlist.number_rating += 1
+        watchlist.save()
+        
         serializer.save(watchlist=watchlist, user=user)
 
 
