@@ -26,4 +26,6 @@ class UserSerializer(serializers.ModelSerializer):
         account = User(username=self.validated_data.get('username'), email=self.validated_data.get('email'))
         account.set_password(password)
 
+        account.save()
+
         return account
