@@ -8,7 +8,7 @@ from .permissions import AdminOrReadOnly, ReviewUserOrReadOnly
 
 
 class ReviewList(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AdminOrReadOnly]
     serializer_class = ReviewSerializer
 
     def get_queryset(self):
@@ -49,20 +49,24 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
 class WatchListGV(generics.ListCreateAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
+    permission_classes = [AdminOrReadOnly]
 
 
 class WatchListDetailGV(generics.RetrieveUpdateDestroyAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
     lookup_field = 'pk'
+    permission_classes = [AdminOrReadOnly]
 
 
 class StreamList(generics.ListCreateAPIView):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+    permission_classes = [AdminOrReadOnly]
 
 
 class StreamDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     lookup_field = 'pk'
+    permission_classes = [AdminOrReadOnly]
